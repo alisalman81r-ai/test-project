@@ -71,7 +71,7 @@ export default function Home() {
         <nav className="nav" aria-label="Primary navigation">
           <a className="brand" href="/">
             <span className="brand-mark">
-              <HardHat size={41} strokeWidth={2.4} />
+              <HardHat size={41} strokeWidth={2.6} />
             </span>
             IronPeak
           </a>
