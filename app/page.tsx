@@ -76,7 +76,7 @@ export default function Home() {
             IronPeak
           </a>
           <div className="nav-links">
-            <a href="#services">Services</a>
+            <a href="#services">Servicesss</a>
             <a href="#projects">Projects</a>
             <a href="#process">Process</a>
             <a href="/contact">Contact</a>
