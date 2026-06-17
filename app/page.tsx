@@ -32,7 +32,7 @@ const services = [
   {
     icon: ClipboardCheck,
     title: "Project Management",
-    text: "Daily coordination, safety controls, procurement, reporting, and milestone tracking from start to closeout.",
+    text: "Daily coordination.",
   },
 ];
 
@@ -71,7 +71,7 @@ export default function Home() {
         <nav className="nav" aria-label="Primary navigation">
           <a className="brand" href="/">
             <span className="brand-mark">
-              <HardHat size={21} strokeWidth={2.4} />
+              <HardHat size={41} strokeWidth={2.4} />
             </span>
             IronPeak
           </a>
