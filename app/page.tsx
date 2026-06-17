@@ -17,7 +17,7 @@ const services = [
   {
     icon: Building2,
     title: "Commercial Builds",
-    text: "Ground-up construction for offices, retail spaces, mixed-use buildings, and industrial facilities.",
+    text: "this is called construction.",
   },
   {
     icon: Hammer,
