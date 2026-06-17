@@ -71,12 +71,12 @@ export default function Home() {
         <nav className="nav" aria-label="Primary navigation">
           <a className="brand" href="/">
             <span className="brand-mark">
-              <HardHat size={41} strokeWidth={2.4} />
+              <HardHat size={41} strokeWidth={2.6} />
             </span>
             IronPeak
           </a>
           <div className="nav-links">
-            <a href="#services">Services</a>
+            <a href="#services">Servicesss</a>
             <a href="#projects">Projects</a>
             <a href="#process">Process</a>
             <a href="/contact">Contact</a>
