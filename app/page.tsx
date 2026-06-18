@@ -68,7 +68,7 @@ export default function Home() {
   return (
     <main>
       <section
-        className="relative min-h-screen flex flex-col"
+        className="relative min-h-screen flex flex-col overflow-hidden"
         style={{
           backgroundImage: 'url("https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1800&q=85")',
           backgroundPosition: 'center',
@@ -77,8 +77,22 @@ export default function Home() {
         }}
         id="home"
       >
+        {/* Background video */}
+        <video
+          className="absolute inset-0 h-full w-full object-cover z-0 bg-black"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+          preload="auto"
+          poster="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1800&q=85"
+        >
+          <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+        </video>
+
         {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-slate-950/75"></div>
+        <div className="absolute inset-0 bg-slate-950/70"></div>
 
         {/* Navigation */}
         <nav className="relative z-10 flex items-center justify-between gap-6 max-w-6xl mx-auto w-full px-6 py-6 animate-fade-up animate-delay-100" aria-label="Primary navigation">
