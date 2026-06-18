@@ -31,7 +31,7 @@ const services = [
   },
   {
     icon: ClipboardCheck,
-    title: "Project Management",
+    title: "Management",
     text: "Daily coordination.",
   },
 ];
