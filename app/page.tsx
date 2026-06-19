@@ -88,8 +88,8 @@ export default function Home() {
           preload="auto"
           poster="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1800&q=85"
         >
-          <source src="https://cdn.pixabay.com/vimeo/767778432/construction%20site-101104.mp4" type="video/mp4" />
-          <source src="https://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/3215826/3215826-sd_640_360_30fps.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/28369/28369-sd_640_360_25fps.mp4" type="video/mp4" />
         </video>
 
         {/* Dark Overlay */}
