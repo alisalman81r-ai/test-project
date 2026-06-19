@@ -88,7 +88,8 @@ export default function Home() {
           preload="auto"
           poster="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1800&q=85"
         >
-          <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+          <source src="https://cdn.pixabay.com/vimeo/767778432/construction%20site-101104.mp4" type="video/mp4" />
+          <source src="https://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4" />
         </video>
 
         {/* Dark Overlay */}
