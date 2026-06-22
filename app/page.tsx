@@ -177,7 +177,6 @@ export default function Home() {
             <a href="#services" className="hover:text-orange-300 transition">Services</a>
             <a href="#projects" className="hover:text-orange-300 transition">Projects</a>
             <a href="#process" className="hover:text-orange-300 transition">Process</a>
-            <a href="/contact" className="hover:text-orange-300 transition">Contact</a>
           </div>
           <a className="inline-flex items-center gap-2 px-5 py-2 rounded bg-orange-500 hover:bg-orange-600 text-white text-sm font-black transition" href="tel:+15550148200">
             <Phone size={17} />
