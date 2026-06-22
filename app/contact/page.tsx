@@ -1,6 +1,10 @@
+"use client";
+
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import {
   ArrowLeft,
   ArrowRight,
+  CheckCircle2,
   Clock,
   HardHat,
   Mail,
@@ -31,6 +35,61 @@ const contactMethods = [
 ];
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    projectType: "",
+    message: "",
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedName, setSubmittedName] = useState("");
+
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (isSubmitted) {
+      setIsSubmitted(false);
+    }
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const storedSubmissions = JSON.parse(
+      localStorage.getItem("allSubmissions") || "[]"
+    );
+
+    const newSubmission = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      source: "contact",
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      projectType: formData.projectType,
+      message: formData.message.trim(),
+      submittedAt: new Date().toISOString(),
+      status: "pending",
+    };
+
+    localStorage.setItem(
+      "allSubmissions",
+      JSON.stringify([...storedSubmissions, newSubmission])
+    );
+
+    setSubmittedName(formData.name.trim());
+    setIsSubmitted(true);
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      projectType: "",
+      message: "",
+    });
+  };
+
   return (
     <main>
       <section className="min-h-screen bg-white">
@@ -99,40 +158,93 @@ export default function ContactPage() {
                 className="w-full h-80 object-cover"
               />
             </div>
-            <form className="grid gap-4 p-6 rounded border border-gray-200 bg-gray-50 animate-fade-up animate-delay-350">
-              <label className="grid gap-2 text-sm font-black">
-                Name
-                <input type="text" name="name" placeholder="Your name" className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600" />
-              </label>
-              <label className="grid gap-2 text-sm font-black">
-                Email
-                <input type="email" name="email" placeholder="you@example.com" className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600" />
-              </label>
-              <label className="grid gap-2 text-sm font-black">
-                Phone
-                <input type="tel" name="phone" placeholder="(555) 000-0000" className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600" />
-              </label>
-              <label className="grid gap-2 text-sm font-black">
-                Project Type
-                <select name="projectType" defaultValue="" className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-orange-600">
-                  <option value="" disabled>
-                    Select a type
-                  </option>
-                  <option>Commercial build</option>
-                  <option>Residential project</option>
-                  <option>Renovation</option>
-                  <option>Project management</option>
-                </select>
-              </label>
-              <label className="grid gap-2 text-sm font-black">
-                Message
-                <textarea name="message" placeholder="Share a few details" rows={5} className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 resize-none" />
-              </label>
-              <button type="submit" className="inline-flex items-center justify-center gap-2 min-h-12 px-5 rounded bg-orange-600 hover:bg-orange-700 text-white font-black mt-2 w-full animate-pop animate-delay-400">
-                Send Inquiry
-                <ArrowRight size={18} />
-              </button>
-            </form>
+
+            {isSubmitted ? (
+              <div className="rounded-3xl border border-green-200 bg-green-50 p-8 text-center shadow-sm animate-fade-up">
+                <div className="flex justify-center mb-4">
+                  <CheckCircle2 size={52} className="text-green-600" />
+                </div>
+                <p className="text-xs font-black uppercase tracking-[0.3em] text-green-700">Message sent</p>
+                <h2 className="mt-3 text-3xl font-black text-gray-900">
+                  Thank you{submittedName ? `, ${submittedName}` : ""}!
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-gray-600">
+                  We’ve received your message and our team will review it shortly. A member of our staff will contact you soon.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="grid gap-4 p-6 rounded border border-gray-200 bg-gray-50 animate-fade-up animate-delay-350">
+                <label className="grid gap-2 text-sm font-black">
+                  Name
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Your name"
+                    required
+                    className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-black">
+                  Email
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    required
+                    className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-black">
+                  Phone
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="(555) 000-0000"
+                    className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-black">
+                  Project Type
+                  <select
+                    name="projectType"
+                    value={formData.projectType}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-orange-600"
+                    required
+                  >
+                    <option value="" disabled>
+                      Select a type
+                    </option>
+                    <option>Commercial build</option>
+                    <option>Residential project</option>
+                    <option>Renovation</option>
+                    <option>Project management</option>
+                  </select>
+                </label>
+                <label className="grid gap-2 text-sm font-black">
+                  Message
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Share a few details"
+                    rows={5}
+                    required
+                    className="w-full border border-gray-300 rounded px-3 py-3 text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 resize-none"
+                  />
+                </label>
+                <button type="submit" className="inline-flex items-center justify-center gap-2 min-h-12 px-5 rounded bg-orange-600 hover:bg-orange-700 text-white font-black mt-2 w-full animate-pop animate-delay-400">
+                  Send Inquiry
+                  <ArrowRight size={18} />
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </section>
