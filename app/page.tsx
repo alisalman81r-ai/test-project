@@ -232,7 +232,7 @@ export default function Home() {
                   onClick={() => setShowQuoteForm(true)}
                   className="button primary"
                 >
-                  Start estimate
+                  Start estimatee
                   <ArrowRight size={18} />
                 </button>
               </div>
