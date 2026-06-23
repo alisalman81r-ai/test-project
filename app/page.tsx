@@ -34,7 +34,7 @@ const services = [
   },
   {
     icon: ClipboardCheck,
-    title: "Project Management",
+    title: "Management",
     text: "Daily coordination.",
   },
 ];
@@ -112,10 +112,12 @@ export default function Home() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     project: "",
     message: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedName, setSubmittedName] = useState("");
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -131,7 +133,26 @@ export default function Home() {
       submittedAt: new Date().toISOString(),
     };
     localStorage.setItem("quoteSubmissions", JSON.stringify([...submissions, quoteEntry]));
-    setFormData({ name: "", email: "", project: "", message: "" });
+
+    const allSubmissions = JSON.parse(localStorage.getItem("allSubmissions") || "[]");
+    const reviewEntry = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      source: "quote",
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      projectType: formData.project,
+      message: formData.message.trim(),
+      submittedAt: new Date().toISOString(),
+      status: "pending",
+    };
+    localStorage.setItem(
+      "allSubmissions",
+      JSON.stringify([...allSubmissions, reviewEntry])
+    );
+
+    setSubmittedName(formData.name.trim());
+    setFormData({ name: "", email: "", phone: "", project: "", message: "" });
     setIsSubmitted(true);
   };
 
@@ -198,7 +219,7 @@ export default function Home() {
 
               <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
                 <label className="group relative block rounded-full border border-white/10 bg-white/10 px-4 py-3 transition hover:border-white/20">
-                  <span className="sr-only">Email address</span>
+                  <span className="sr-only">Email addresss</span>
                   <input
                     type="email"
                     placeholder="Enter your email"
@@ -210,7 +231,7 @@ export default function Home() {
                   onClick={() => setShowQuoteForm(true)}
                   className="button primary"
                 >
-                  Start estimate
+                  Start estimatee
                   <ArrowRight size={18} />
                 </button>
               </div>
@@ -306,6 +327,17 @@ export default function Home() {
                 </div>
 
                 <label className="block">
+                  <span className="text-sm text-slate-300">Phone number</span>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="mt-2 block w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-orange-500"
+                  />
+                </label>
+
+                <label className="block">
                   <span className="text-sm text-slate-300">Project type or location</span>
                   <input
                     name="project"
@@ -334,8 +366,10 @@ export default function Home() {
                     Submit Request
                   </button>
                   {isSubmitted && (
-                    <p className="rounded-2xl bg-emerald-500/15 px-4 py-3 text-sm text-emerald-100 ring-1 ring-emerald-500/25">
-                      Request saved locally.
+                    <p className="rounded-2xl bg-emerald-500/15 px-4 py-3 text-sm leading-6 text-emerald-100 ring-1 ring-emerald-500/25">
+                      {submittedName
+                        ? `Thank you, ${submittedName}! Your quote request has been received and our team will be in touch soon.`
+                        : "Thank you! Your quote request has been received and our team will be in touch soon."}
                     </p>
                   )}
                 </div>
