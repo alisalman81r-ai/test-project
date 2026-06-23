@@ -257,6 +257,32 @@ h1 {
   letter-spacing: -0.04em;
 }
 
+.hero-outline-title {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1.5px rgba(247, 244, 238, 0.96);
+  text-shadow:
+    0 0 26px rgba(255, 178, 116, 0.22),
+    0 12px 38px rgba(0, 0, 0, 0.42);
+}
+
+@supports not (-webkit-text-stroke: 1px #fff) {
+  .hero-outline-title {
+    color: rgba(247, 244, 238, 0.08);
+    text-shadow:
+      1px 0 rgba(247, 244, 238, 0.9),
+      -1px 0 rgba(247, 244, 238, 0.9),
+      0 1px rgba(247, 244, 238, 0.9),
+      0 -1px rgba(247, 244, 238, 0.9);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-outline-title {
+    -webkit-text-stroke-width: 1.1px;
+  }
+}
+
 h2 {
   margin-bottom: 18px;
   font-size: clamp(2rem, 3vw, 3.5rem);
