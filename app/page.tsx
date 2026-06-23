@@ -220,7 +220,7 @@ export default function Home() {
 
               <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
                 <label className="group relative block rounded-full border border-white/10 bg-white/10 px-4 py-3 transition hover:border-white/20">
-                  <span className="sr-only">Email address</span>
+                  <span className="sr-only">Email addresss</span>
                   <input
                     type="email"
                     placeholder="Enter your email"
