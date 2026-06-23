@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   ArrowRight,
   Building2,
@@ -107,6 +107,18 @@ const heroHighlights = [
   },
 ];
 
+type Submission = {
+  id: string;
+  source: "contact" | "quote";
+  name: string;
+  email: string;
+  phone: string;
+  projectType: string;
+  message: string;
+  submittedAt: string;
+  status: "pending" | "accepted";
+};
+
 export default function Home() {
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -118,6 +130,15 @@ export default function Home() {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedName, setSubmittedName] = useState("");
+  const [showView, setShowView] = useState(false);
+  const [viewSubmissions, setViewSubmissions] = useState<Submission[]>([]);
+
+  useEffect(() => {
+    if (!showView) return;
+
+    const submissions = JSON.parse(localStorage.getItem("allSubmissions") || "[]");
+    setViewSubmissions(submissions);
+  }, [showView]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -210,7 +231,7 @@ export default function Home() {
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] items-center">
             <div className="space-y-8">
               <p className="eyebrow">Licensed general contractors</p>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight max-w-3xl">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight max-w-3xl bg-gradient-to-r from-[#f7f4ee] via-[#ffb274] to-[#ff9f35] text-transparent bg-clip-text">
                 Precision construction for ambitious owners and operators
               </h1>
               <p className="text-lg text-slate-200 leading-relaxed max-w-2xl">
@@ -613,14 +634,94 @@ export default function Home() {
       </section>
 
       <footer className="footer">
-        <a className="brand" href="/">
-          <span className="brand-mark">
-            <Warehouse size={20} />
-          </span>
-          IronPeak
-        </a>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full">
+          <a className="brand" href="/">
+            <span className="brand-mark">
+              <Warehouse size={20} />
+            </span>
+            IronPeak
+          </a>
+          <button
+            type="button"
+            onClick={() => setShowView(true)}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-orange-500 px-5 py-3 font-black text-white hover:bg-orange-600 transition"
+          >
+            View submissions
+          </button>
+        </div>
         <p>Licensed, bonded, and insured general contractors.</p>
       </footer>
+
+      {showView ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4">
+          <div className="w-full max-w-4xl overflow-hidden rounded-[32px] border border-white/10 bg-slate-950 p-6 text-white shadow-2xl">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-orange-300">Submissions</p>
+                <h2 className="mt-2 text-3xl font-black">Form submission data</h2>
+                <p className="mt-2 text-sm text-slate-400">
+                  Review all stored quote and contact requests captured from the site.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowView(false)}
+                className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Close
+              </button>
+            </div>
+
+            {viewSubmissions.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-white/10 bg-white/5 p-10 text-center text-slate-300">
+                No submission data available yet.
+              </div>
+            ) : (
+              <div className="space-y-4 max-h-[65vh] overflow-y-auto pr-2">
+                {viewSubmissions
+                  .slice()
+                  .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())
+                  .map((item) => (
+                    <article key={item.id} className="rounded-3xl border border-white/10 bg-slate-900 p-5">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.3em] text-orange-300">{item.source} request</p>
+                          <h3 className="mt-2 text-xl font-black">{item.name || "Unnamed"}</h3>
+                        </div>
+                        <span className="rounded-full bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-300">
+                          {item.status}
+                        </span>
+                      </div>
+
+                      <div className="mt-4 grid gap-3 sm:grid-cols-2 text-sm text-slate-300">
+                        <div>
+                          <p className="font-semibold text-slate-100">Email</p>
+                          <p>{item.email || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-slate-100">Phone</p>
+                          <p>{item.phone || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-slate-100">Project</p>
+                          <p>{item.projectType || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-slate-100">Submitted</p>
+                          <p>{new Date(item.submittedAt).toLocaleString()}</p>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 rounded-3xl bg-white/5 p-4 text-sm text-slate-200">
+                        {item.message || "No message provided."}
+                      </div>
+                    </article>
+                  ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
