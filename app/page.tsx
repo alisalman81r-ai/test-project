@@ -232,7 +232,7 @@ export default function Home() {
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] items-center">
             <div className="space-y-8">
               <p className="eyebrow">Licensed general contractors</p>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight max-w-3xl">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight max-w-3xl bg-gradient-to-r from-[#f7f4ee] via-[#ffb274] to-[#ff9f35] text-transparent bg-clip-text">
                 Precision construction for ambitious owners and operators
               </h1>
               <p className="text-lg text-slate-200 leading-relaxed max-w-2xl">
