@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, Trash2, Mail, Clock, HardHat } from "lucide-react";
+import { initScrollReveal } from "../scrollReveal";
 
 interface Submission {
   id: string;
@@ -23,6 +24,8 @@ export default function SubmissionsPage() {
     const stored = JSON.parse(localStorage.getItem("allSubmissions") || "[]");
     setSubmissions(stored);
   }, []);
+
+  useEffect(() => initScrollReveal(), [submissions.length, pendingDeleteId]);
 
   const handleDeleteClick = (id: string) => {
     setPendingDeleteId(id);
@@ -62,7 +65,7 @@ export default function SubmissionsPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <section className="max-w-7xl mx-auto px-6 py-12">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between" data-scroll-reveal>
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-orange-300">Review panel</p>
             <h1 className="mt-2 text-4xl font-black">Submitted requests</h1>
@@ -77,11 +80,11 @@ export default function SubmissionsPage() {
         </div>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5" data-scroll-reveal="scale">
             <p className="text-sm text-slate-300">Pending</p>
             <p className="mt-2 text-3xl font-black">{pendingCount}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5" data-scroll-reveal="scale" data-scroll-delay="90ms">
             <p className="text-sm text-slate-300">Accepted</p>
             <p className="mt-2 text-3xl font-black">{acceptedCount}</p>
           </div>
@@ -89,17 +92,19 @@ export default function SubmissionsPage() {
 
         <div className="mt-8 space-y-4">
           {submissions.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-10 text-center text-slate-300">
+            <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-10 text-center text-slate-300" data-scroll-reveal="scale">
               No submissions yet.
             </div>
           ) : (
             submissions
               .slice()
               .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())
-              .map((item) => (
+              .map((item, index) => (
                 <article
                   key={item.id}
                   className="rounded-2xl border border-white/10 bg-white/5 p-6"
+                  data-scroll-reveal="slide-right"
+                  data-scroll-delay={`${index * 80}ms`}
                 >
                   <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                     <div>

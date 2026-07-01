@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Warehouse,
 } from "lucide-react";
+import { initScrollReveal } from "./scrollReveal";
 
 const services = [
   {
@@ -140,6 +141,8 @@ export default function Home() {
     setViewSubmissions(submissions);
   }, [showView]);
 
+  useEffect(() => initScrollReveal(), [showQuoteForm, showView, viewSubmissions.length]);
+
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -220,10 +223,15 @@ export default function Home() {
             <a href="#projects" className="hover:text-orange-300 transition">Projects</a>
             <a href="#process" className="hover:text-orange-300 transition">Process</a>
           </div>
-          <a className="inline-flex items-center gap-2 px-5 py-2 rounded bg-orange-500 hover:bg-orange-600 text-white text-sm font-black transition" href="tel:+15550148200">
-            <Phone size={17} />
-            Call Us
-          </a>
+          <div className="flex items-center gap-3">
+            <a href="/login" className="inline-flex items-center px-4 py-2 rounded border border-white/30 hover:border-white/60 text-white text-sm font-medium transition hover:bg-white/10">
+              Login
+            </a>
+            <a className="inline-flex items-center gap-2 px-5 py-2 rounded bg-orange-500 hover:bg-orange-600 text-white text-sm font-black transition" href="tel:+15550148200">
+              <Phone size={17} />
+              Call Us
+            </a>
+          </div>
         </nav>
 
         {/* Hero Content */}
@@ -272,7 +280,7 @@ export default function Home() {
                   className="h-[520px] w-full object-cover"
                 />
                 <div className="absolute inset-x-4 top-4 rounded-3xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white backdrop-blur-xl">
-                  <div className="text-xs uppercase tracking-[0.24em] text-cyan-200/90">Featured project</div>
+                  <div className="text-xs uppercase tracking-[0.24em] text-orange-200/90">Featured project</div>
                   <p className="mt-2 font-semibold text-white">Riverside office campus</p>
                 </div>
                 <div className="absolute inset-x-4 bottom-4 grid gap-4 sm:grid-cols-2">
@@ -292,7 +300,7 @@ export default function Home() {
           <div className="hero-feature-grid mt-12 grid gap-4 sm:grid-cols-3">
             {heroHighlights.map((item) => (
               <div key={item.label} className="hero-feature-card rounded-[28px] border border-white/10 bg-white/5 p-6">
-                <p className="text-sm uppercase tracking-[0.2em] text-cyan-100/80">{item.label}</p>
+                <p className="text-sm uppercase tracking-[0.2em] text-orange-100/80">{item.label}</p>
                 <p className="mt-4 text-base text-slate-200">{item.description}</p>
               </div>
             ))}
@@ -418,7 +426,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section intro" id="intro">
+      <section className="section intro" id="intro" data-scroll-reveal="scale">
         <div className="intro-shell">
           <div className="intro-card">
             <div className="intro-card-top">
@@ -486,7 +494,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section services" id="services">
+      <section className="section services" id="services" data-scroll-reveal>
         <div className="services-shell">
           <div className="section-heading compact text-center">
             <p className="eyebrow">How we help you</p>
@@ -497,10 +505,15 @@ export default function Home() {
           </div>
 
           <div className="service-list">
-            {services.map((service) => {
+            {services.map((service, index) => {
               const Icon = service.icon;
               return (
-                <article className="service-item" key={service.title}>
+                <article
+                  className="service-item"
+                  key={service.title}
+                  data-scroll-reveal="slide-right"
+                  data-scroll-delay={`${index * 90}ms`}
+                >
                   <div className="service-icon">
                     <Icon size={24} />
                   </div>
@@ -518,7 +531,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section project-band" id="projects">
+      <section className="section project-band" id="projects" data-scroll-reveal>
         <div className="project-shell">
           <div className="project-header">
             <div>
@@ -533,7 +546,12 @@ export default function Home() {
 
           <div className="project-gallery">
             {projects.map((project, index) => (
-              <article className={`project-card ${index === 1 ? "active" : ""}`} key={project.name}>
+              <article
+                className={`project-card ${index === 1 ? "active" : ""}`}
+                key={project.name}
+                data-scroll-reveal="scale"
+                data-scroll-delay={`${index * 90}ms`}
+              >
                 <img src={project.image} alt={`${project.name} construction project`} />
                 <div className="project-info">
                   <span>{project.type}</span>
@@ -547,7 +565,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section process" id="process">
+      <section className="section process" id="process" data-scroll-reveal>
         <div className="process-shell">
           <div className="process-heading">
             <p className="eyebrow">Process</p>
@@ -572,8 +590,13 @@ export default function Home() {
           </div>
 
           <div className="process-grid">
-            {processItems.map((item) => (
-              <article className="process-card" key={item.title}>
+            {processItems.map((item, index) => (
+              <article
+                className="process-card"
+                key={item.title}
+                data-scroll-reveal="scale"
+                data-scroll-delay={`${index * 100}ms`}
+              >
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
                 <a className="process-cta" href="#contact">Learn more</a>
@@ -644,7 +667,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setShowView(true)}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-orange-500 px-5 py-3 font-black text-white hover:bg-orange-600 transition"
+            className="submission-view-button"
           >
             View submissions
           </button>
