@@ -129,15 +129,17 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="relative">
-      {/* Spotlight overlay — pointer-events-none so it never blocks clicks */}
-      <div
-        ref={spotlightRef}
-        className="fixed inset-0 z-0 pointer-events-none transition-none"
-        aria-hidden="true"
-      />
+    <main>
+      <section className="relative min-h-screen bg-[#050907] text-white overflow-hidden">
+        {/* Spotlight — absolute inside section so it sits above the bg but below content */}
+        <div
+          ref={spotlightRef}
+          className="absolute inset-0 z-0 pointer-events-none"
+          aria-hidden="true"
+        />
 
-      <section className="relative z-10 min-h-screen bg-[#050907] text-white" style={{ background: "linear-gradient(160deg,#050907 0%,#040806 100%)" }}>
+        {/* All content above the spotlight */}
+        <div className="relative z-10">
         {/* Navigation */}
         <nav className="flex items-center justify-between gap-6 max-w-4xl mx-auto px-6 py-4 animate-fade-up animate-delay-100" aria-label="Primary navigation" data-scroll-reveal>
           <a className="inline-flex items-center gap-2 font-black text-base" href="/">
@@ -298,6 +300,7 @@ export default function ContactPage() {
             )}
           </div>
         </div>
+        </div>{/* end relative z-10 */}
       </section>
 
       {/* Footer */}
