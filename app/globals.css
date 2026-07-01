@@ -195,6 +195,79 @@ body {
   }
 }
 
+/* ── Login page animations ── */
+@keyframes loginBgDrift {
+  0%   { transform: translate(0,0) scale(1); }
+  33%  { transform: translate(3%,2%) scale(1.06); }
+  66%  { transform: translate(-2%,4%) scale(1.03); }
+  100% { transform: translate(0,0) scale(1); }
+}
+@keyframes loginOrb1 {
+  0%,100% { transform: translate(0,0) scale(1);    opacity: .55; }
+  50%      { transform: translate(6%,8%) scale(1.18); opacity: .80; }
+}
+@keyframes loginOrb2 {
+  0%,100% { transform: translate(0,0) scale(1);      opacity: .40; }
+  50%      { transform: translate(-5%,-6%) scale(1.14); opacity: .60; }
+}
+@keyframes loginCardIn {
+  from { opacity: 0; transform: translateY(36px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+@keyframes loginFadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes loginShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes loginPhotoPan {
+  0%   { transform: translate(0,0); }
+  100% { transform: translate(-3%,-2%); }
+}
+@keyframes loginBadgePulse {
+  0%,100% { box-shadow: 0 0 0 0   rgba(255,178,116,0); }
+  50%      { box-shadow: 0 0 0 7px rgba(255,178,116,.14); }
+}
+@keyframes loginBackBtn {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes loginSpin {
+  to { transform: rotate(360deg); }
+}
+
+.login-bg-drift  { animation: loginBgDrift 18s ease-in-out infinite; }
+.login-orb-1     { animation: loginOrb1 12s ease-in-out infinite; }
+.login-orb-2     { animation: loginOrb2 15s ease-in-out infinite; }
+.login-card-in   { animation: loginCardIn .75s cubic-bezier(.22,1,.36,1) both; }
+.login-back      { animation: loginBackBtn .6s cubic-bezier(.22,1,.36,1) both .1s; }
+.login-a1  { animation: loginFadeUp .55s ease both .15s; }
+.login-a2  { animation: loginFadeUp .55s ease both .28s; }
+.login-a3  { animation: loginFadeUp .55s ease both .36s; }
+.login-a4  { animation: loginFadeUp .55s ease both .44s; }
+.login-a5  { animation: loginFadeUp .55s ease both .52s; }
+.login-a6  { animation: loginFadeUp .55s ease both .62s; }
+.login-a7  { animation: loginFadeUp .55s ease both .72s; }
+.login-photo-pan { animation: loginPhotoPan 14s ease-in-out infinite alternate; }
+.login-badge-pulse { animation: loginBadgePulse 2.8s ease-in-out infinite; }
+.login-spin { animation: loginSpin .7s linear infinite; }
+
+.login-shimmer-btn {
+  background-size: 200% auto;
+  background-image: linear-gradient(135deg,#ffb274 0%,#ff9f35 30%,#ffd0a0 50%,#ff9f35 70%,#ffb274 100%);
+  animation: loginShimmer 2.4s linear infinite;
+  transition: box-shadow .2s ease, transform .15s ease;
+}
+.login-shimmer-btn:hover:not(:disabled) {
+  box-shadow: 0 18px 38px rgba(255,162,58,.45) !important;
+  transform: translateY(-2px);
+}
+.login-shimmer-btn:active:not(:disabled) {
+  transform: scale(.97);
+}
+
 a {
   color: inherit;
   text-decoration: none;
