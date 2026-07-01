@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -48,6 +48,41 @@ export default function ContactPage() {
 
   useEffect(() => initScrollReveal(), [isSubmitted]);
 
+  // Spotlight effect — updates DOM directly to avoid re-renders on every mousemove
+  const spotlightRef = useRef<HTMLDivElement>(null);
+  const mouse = useRef({ x: 0, y: 0, tx: 0, ty: 0, rafId: 0 });
+
+  useEffect(() => {
+    const el = spotlightRef.current;
+    if (!el) return;
+
+    function onMove(e: MouseEvent) {
+      mouse.current.tx = e.clientX;
+      mouse.current.ty = e.clientY;
+    }
+
+    function loop() {
+      const m = mouse.current;
+      // smooth lerp toward target
+      m.x += (m.tx - m.x) * 0.08;
+      m.y += (m.ty - m.y) * 0.08;
+      if (el) {
+        el.style.background = `radial-gradient(650px circle at ${m.x}px ${m.y}px,
+          rgba(255,162,58,0.13) 0%,
+          rgba(255,178,116,0.06) 25%,
+          transparent 70%)`;
+      }
+      m.rafId = requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("mousemove", onMove);
+    mouse.current.rafId = requestAnimationFrame(loop);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(mouse.current.rafId);
+    };
+  }, []);
+
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -94,8 +129,15 @@ export default function ContactPage() {
   };
 
   return (
-    <main>
-      <section className="min-h-screen bg-[#050907] text-white">
+    <main className="relative">
+      {/* Spotlight overlay — pointer-events-none so it never blocks clicks */}
+      <div
+        ref={spotlightRef}
+        className="fixed inset-0 z-0 pointer-events-none transition-none"
+        aria-hidden="true"
+      />
+
+      <section className="relative z-10 min-h-screen bg-[#050907] text-white" style={{ background: "linear-gradient(160deg,#050907 0%,#040806 100%)" }}>
         {/* Navigation */}
         <nav className="flex items-center justify-between gap-6 max-w-4xl mx-auto px-6 py-4 animate-fade-up animate-delay-100" aria-label="Primary navigation" data-scroll-reveal>
           <a className="inline-flex items-center gap-2 font-black text-base" href="/">
