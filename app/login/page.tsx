@@ -99,8 +99,9 @@ export default function LoginPage() {
           </div>
 
           {/* Heading */}
-          <h1 className="login-a2 font-bold text-3xl mb-1" style={{ color: "#f7f4ee", letterSpacing: "-0.02em" }}>
-            Sign In to <span style={{ color: "#ffb274" }}>IronPeak</span>
+          <h1 className="login-a2 font-bold mb-1" style={{ color: "#f7f4ee", letterSpacing: "-0.02em" }}>
+            <span className="block text-lg font-semibold" style={{ color: "#bab6a9" }}>Sign in to</span>
+            <span className="block text-3xl" style={{ color: "#ffb274" }}>IronPeak</span>
           </h1>
           <p className="login-a3 text-sm mb-8" style={{ color: "#bab6a9" }}>
             Sign in to your admin portal
