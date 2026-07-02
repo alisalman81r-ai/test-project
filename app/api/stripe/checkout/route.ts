@@ -15,7 +15,7 @@ const PRICE_IDS: Record<string, string> = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { planId } = await req.json();
+    const { planId, name, email } = await req.json();
 
     const priceId = PRICE_IDS[planId];
     if (!priceId) {
@@ -26,10 +26,21 @@ export async function POST(req: NextRequest) {
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: "payment",
+
+      // Pre-fill cardholder name and email
+      ...(email ? { customer_email: email } : {}),
+      payment_intent_data: {
+        ...(name ? { description: `Customer: ${name}` } : {}),
+      },
+
+      // Collect full billing address (includes name on card)
+      billing_address_collection: "required",
+
+      // Pass name through as metadata for reference
+      metadata: { plan: planId, customer_name: name ?? "" },
+
       success_url: `${BASE_URL}/pricing/success?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
       cancel_url:  `${BASE_URL}/pricing?cancelled=true`,
-      billing_address_collection: "auto",
-      phone_number_collection: { enabled: true },
     });
 
     return NextResponse.json({ url: session.url });
