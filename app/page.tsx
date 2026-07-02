@@ -222,6 +222,7 @@ export default function Home() {
             <a href="#services" className="hover:text-orange-300 transition">Services</a>
             <a href="#projects" className="hover:text-orange-300 transition">Projects</a>
             <a href="#process" className="hover:text-orange-300 transition">Process</a>
+            <a href="/pricing" className="hover:text-orange-300 transition">Pricing</a>
           </div>
           <div className="flex items-center gap-3">
             <a href="/login" className="inline-flex items-center px-4 py-2 rounded border border-white/30 hover:border-white/60 text-white text-sm font-medium transition hover:bg-white/10">
