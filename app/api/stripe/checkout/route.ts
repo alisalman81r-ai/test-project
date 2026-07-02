@@ -7,50 +7,29 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-// Plan definitions — price_id comes from your Stripe dashboard
-// For test mode, create products in Stripe and paste the price IDs here.
-const PLANS: Record<string, { name: string; priceId: string; amount: number }> = {
-  starter: {
-    name: "Starter Package",
-    priceId: process.env.STRIPE_PRICE_STARTER || "price_starter_test",
-    amount: 29900, // $299 in cents
-  },
-  professional: {
-    name: "Professional Package",
-    priceId: process.env.STRIPE_PRICE_PROFESSIONAL || "price_professional_test",
-    amount: 99900, // $999 in cents
-  },
-  enterprise: {
-    name: "Enterprise Package",
-    priceId: process.env.STRIPE_PRICE_ENTERPRISE || "price_enterprise_test",
-    amount: 249900, // $2499 in cents
-  },
+const PRICE_IDS: Record<string, string> = {
+  starter:      process.env.STRIPE_PRICE_STARTER!,
+  professional: process.env.STRIPE_PRICE_PROFESSIONAL!,
+  enterprise:   process.env.STRIPE_PRICE_ENTERPRISE!,
 };
 
 export async function POST(req: NextRequest) {
   try {
     const { planId } = await req.json();
 
-    const plan = PLANS[planId];
-    if (!plan) {
+    const priceId = PRICE_IDS[planId];
+    if (!priceId) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: { name: plan.name },
-            unit_amount: plan.amount,
-          },
-          quantity: 1,
-        },
-      ],
+      line_items: [{ price: priceId, quantity: 1 }],
       mode: "payment",
       success_url: `${BASE_URL}/pricing/success?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
-      cancel_url: `${BASE_URL}/pricing?cancelled=true`,
+      cancel_url:  `${BASE_URL}/pricing?cancelled=true`,
+      billing_address_collection: "auto",
+      phone_number_collection: { enabled: true },
     });
 
     return NextResponse.json({ url: session.url });
