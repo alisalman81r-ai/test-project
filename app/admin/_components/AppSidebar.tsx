@@ -3,7 +3,7 @@
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, LogOut, HardHat } from "lucide-react";
+import { LayoutDashboard, CreditCard, HardHat } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/sidebar";
 
 const navItems = [
-  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Dashboard", href: "/admin",          icon: LayoutDashboard },
+  { label: "Payments",  href: "/admin/payments",  icon: CreditCard },
 ];
 
 export default function AppSidebar({
